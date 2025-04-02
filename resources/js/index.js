@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if user is already logged in
     if (auth.isAuthenticated()) {
-        window.location.href = 'dashboard.html';
+        window.location.href = 'pages/02-Dashboard/dashboard.html';
         return;
     }
 
@@ -16,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             await auth.login(username, password);
-            window.location.href = 'dashboard.html';
+            window.location.href = 'pages/02-Dashboard/dashboard.html';
         } catch (error) {
             errorMessage.textContent = error.message;
             errorMessage.style.display = 'block';

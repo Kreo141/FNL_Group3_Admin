@@ -1,8 +1,5 @@
-
-
 // Authentication functions
 const auth = {
-    // Helper function to hash passwords
     hashPassword: function(password) {
         return crypto.subtle.digest('SHA-256', new TextEncoder().encode(password))
             .then(hash => {
@@ -14,13 +11,10 @@ const auth = {
 
     login: function(username, password) {
         return new Promise((resolve, reject) => {
-            // Hash the provided password
             this.hashPassword(password)
                 .then(hashedPassword => {
-                    // Compare with stored hash from config
                     if (username === ADMIN_CONFIG.username && 
                         hashedPassword === ADMIN_CONFIG.passwordHash) {
-                        // Set session storage to maintain login state
                         sessionStorage.setItem('isLoggedIn', 'true');
                         sessionStorage.setItem('username', username);
                         resolve(true);
@@ -37,7 +31,7 @@ const auth = {
     logout: function() {
         sessionStorage.removeItem('isLoggedIn');
         sessionStorage.removeItem('username');
-        window.location.href = 'index.html';
+        window.location.href = '../../index.html';
     },
 
     isAuthenticated: function() {
@@ -45,8 +39,13 @@ const auth = {
     },
 
     checkAuth: function() {
-        if (!this.isAuthenticated() && window.location.pathname !== '/index.html') {
-            window.location.href = 'index.html';
+        const currentPath = window.location.pathname;
+        const isLoginPage = currentPath.endsWith('index.html') || currentPath === '/';
+        
+        if (!this.isAuthenticated() && !isLoginPage) {
+            window.location.href = '../../index.html';
+        } else if (this.isAuthenticated() && isLoginPage) {
+            window.location.href = 'pages/02-Dashboard/dashboard.html';
         }
     }
 };
